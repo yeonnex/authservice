@@ -25,7 +25,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter { // <- 시큐�
         http.csrf().disable();
         http.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS) // "이 서버는 stateless 서버야!!!"세션을 만들지 않겠다는 뜻. STATELESS 서버
                 .and()
-                .addFilterBefore(new FooFilter2(), BasicAuthenticationFilter.class) // 시큐리티의 필터가 일반 필터보다 "먼저" 동작한다
+//                .addFilterBefore(new FooFilter1(), BasicAuthenticationFilter.class) // 시큐리티의 필터가 일반 필터보다 "먼저" 동작한다
                 .addFilter(corsFilter) // 이 필터가 잘 동작하는지의 여부는 자바스크립트로 여기로 요청을 보내보면 알 수 있다. @CrossOrigin (인증없어도 되는데서만 동작. 인증이 필요한 경로 요청시 먹지 않음. 인증이 필요한 크로스 오리진 요청시에는 반드시 "시큐리티필터"에 크로스 오리진 설정을 해주어야 한다.
                 .formLogin().disable() // 폼 로그인 안씀
                 .httpBasic().disable() // httpBasic 말고 Bearer 쓸거임
