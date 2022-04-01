@@ -18,4 +18,6 @@ spring:
 logging:
   level:
     com.example.authservice: DEBUG
+    org.hibernate.type.descriptor: trace
+
 
