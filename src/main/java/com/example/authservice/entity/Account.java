@@ -16,8 +16,8 @@ public class Account {
     @Id
     @GeneratedValue
     private Long id;
-    private String email;
     @Email
+    private String email;
     private String password;
     private String name;
     private String roles; // USER, ADMIN
