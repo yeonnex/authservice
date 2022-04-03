@@ -106,7 +106,7 @@ public class CustomLoginFilter extends UsernamePasswordAuthenticationFilter {
                 .withClaim("id", principal.getAccount().getId())
                 .withClaim("name" , principal.getUsername())
                 .withClaim("email", principal.getAccount().getEmail())
-                        .withExpiresAt(new Date(System.currentTimeMillis() + (600000)*10)) // 토큰 만료시간은 10분
+                        .withExpiresAt(new Date(System.currentTimeMillis() + 1000*60*10)) // 토큰 만료시간은 10분
                         .sign(Algorithm.HMAC512("secret-lol-lol"));
         response.addHeader("Authorization", "Bearer " + jwtToken); // 헤더에 담아 응답!
     }
