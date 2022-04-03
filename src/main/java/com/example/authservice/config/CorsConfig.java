@@ -1,5 +1,6 @@
 package com.example.authservice.config;
 
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.cors.CorsConfiguration;
@@ -11,11 +12,13 @@ import org.springframework.web.filter.CorsFilter;
  */
 // 이렇게 달랑 있어서는 의미가 없음. "시큐리티 필터에 등록" 해주어야 함
 @Configuration
+@Slf4j
 public class CorsConfig{
 
     // 스프링 web 에 있는 CorsFilter 임.
     @Bean
     public CorsFilter corsFilter(){
+        log.info("CORS 필터 동작!");
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         CorsConfiguration config = new CorsConfiguration();
         config.setAllowCredentials(true); // 내 서버가 응답을 할 때 json 을 자바스크립트에서 처리할 수 있게함
