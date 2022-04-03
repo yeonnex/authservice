@@ -1,5 +1,7 @@
 package com.example.authservice.filter;
 
+import com.auth0.jwt.JWT;
+import com.auth0.jwt.algorithms.Algorithm;
 import com.example.authservice.auth.CustomUserDetails;
 import com.example.authservice.entity.Account;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -18,6 +20,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.BufferedReader;
 import java.io.IOException;
+import java.util.Date;
 
 /**
  * 스프링 시큐리티에는 UsernamePasswordAuthenticationFilter 가 있음
@@ -92,9 +95,18 @@ public class CustomLoginFilter extends UsernamePasswordAuthenticationFilter {
      * 여기서 JWT 토큰을 만들어주자~
      * 이걸 request 요청한 사용자에게 response 해주면 됨.
      */
+
+    // RSA 방식은 아니고 Hash 암호 방식
     @Override
     protected void successfulAuthentication(HttpServletRequest request, HttpServletResponse response, FilterChain chain, Authentication authResult) throws IOException, ServletException {
         log.info("successfulAuthentication 함수 실행");
-        super.successfulAuthentication(request, response, chain, authResult);
+        CustomUserDetails principal = (CustomUserDetails)authResult.getPrincipal();
+
+        String jwtToken = JWT.create()
+                .withClaim("id", principal.getAccount().getId())
+                .withClaim("name" , principal.getUsername())
+                        .withExpiresAt(new Date(System.currentTimeMillis() + (600000*10))) // 토큰 만료시간은 10분
+                        .sign(Algorithm.HMAC512("secret-lol-lol"));
+        response.addHeader("Authorization", "Bearer " + jwtToken); // 헤더에 담아 응답!
     }
 }
