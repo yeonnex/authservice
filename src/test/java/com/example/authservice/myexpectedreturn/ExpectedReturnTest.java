@@ -17,10 +17,7 @@ public class ExpectedReturnTest {
 
     @Test
     public void 권한_리스트_반환_테스트(){
-        Account account = new Account();
-        account.setRoles("USER,ADMIN");
 
-        assertEquals(2,(accountService.getAccountRoles(account)).size());
 
     }
 }

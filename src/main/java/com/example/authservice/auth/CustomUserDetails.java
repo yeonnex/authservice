@@ -1,7 +1,6 @@
 package com.example.authservice.auth;
 
 import com.example.authservice.entity.Account;
-import com.example.authservice.service.AccountService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -13,14 +12,13 @@ import java.util.HashSet;
 @RequiredArgsConstructor
 public class CustomUserDetails implements UserDetails {
     private final Account account;
-    private final AccountService accountService;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        Collection<GrantedAuthority> authorities = new HashSet<>(accountService.getAccountRoles(account).size()); // List 를 쓰나 Set 을 쓰나 동작에 차이가 없다면 HashSet 을 쓰자!
-        for (String role : accountService.getAccountRoles(account)){
-            authorities.add(new SimpleGrantedAuthority("ROLE_" + role));
-        }
+        Collection<GrantedAuthority> authorities = new HashSet<>(); // List 를 쓰나 Set 을 쓰나 동작에 차이가 없다면 HashSet 을 쓰자!
+
+        authorities.add(new SimpleGrantedAuthority("ROLE_" + account.getRole()));
+
         return authorities;
     }
 

@@ -1,6 +1,7 @@
 package com.example.authservice.controller;
 
 import com.example.authservice.Repository.AccountRepository;
+import com.example.authservice.dto.JoinDto;
 import com.example.authservice.entity.Account;
 import com.example.authservice.service.AccountService;
 import lombok.RequiredArgsConstructor;
@@ -25,13 +26,28 @@ public class HttpApiController {
     }
 
     @PostMapping("/join")
-    public String join(@RequestBody Account account){
-
-        accountService.join(account);
+    public String join(@RequestBody JoinDto joinDto){
+        accountService.join(joinDto);
 
         return "회원가입완료";
     }
 
+    // user,manager,admin 접근가능
+    @GetMapping("/api/v1/user")
+    public String user(){
+        return "user";
+    }
 
+    // manager,admin 접근가능
+    @GetMapping("/api/v1/manager")
+    public String manager(){
+        return "manager";
+    }
+
+    // admin 만 접근가능
+   @GetMapping("/api/v1/admin")
+    public String admin(){
+        return "admin";
+    }
 
 }

@@ -1,6 +1,7 @@
 package com.example.authservice.service;
 
 import com.example.authservice.Repository.AccountRepository;
+import com.example.authservice.dto.JoinDto;
 import com.example.authservice.entity.Account;
 import lombok.RequiredArgsConstructor;
 import org.junit.jupiter.api.Test;
@@ -21,16 +22,16 @@ class AccountServiceTest {
     @Test
     void 회원가입(){
         // given
-        Account account = new Account();
-        account.setEmail("ddd@gmail.com");
-        account.setPassword("1234");
+        JoinDto joinDto = new JoinDto();
+        joinDto.setEmail("yeonnex@gmail.com");
+        joinDto.setName("seoyeon");
+        joinDto.setPassword("1234");
 
-        // when
-        accountService.join(account);
+        accountService.join(joinDto);
 
         // then
         Account findAccount = accountRepository.findByEmail("ddd@gmail.com");
-        assertEquals(findAccount.getEmail(), account.getEmail());
+        assertEquals(findAccount.getEmail(), joinDto.getEmail());
     }
 
 }
