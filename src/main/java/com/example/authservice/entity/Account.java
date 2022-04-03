@@ -1,6 +1,6 @@
 package com.example.authservice.entity;
 
-import lombok.Data;
+import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
 
 import javax.persistence.Entity;
@@ -26,10 +26,5 @@ public class Account {
     @CreationTimestamp
     private LocalDateTime createdAt;
 
-    public List<String> getRoles(){
-        if(this.roles.length() > 0){
-            return List.of(this.roles.split(","));
-        }
-        return new ArrayList<>(); // null 이 안뜨게 해주자.
-    }
+
 }

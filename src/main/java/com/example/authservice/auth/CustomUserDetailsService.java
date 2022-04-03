@@ -2,6 +2,7 @@ package com.example.authservice.auth;
 
 import com.example.authservice.Repository.AccountRepository;
 import com.example.authservice.entity.Account;
+import com.example.authservice.service.AccountService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -23,7 +24,7 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public class CustomUserDetailsService implements UserDetailsService {
     private final AccountRepository accountRepo;
-
+    private final AccountService accountService;
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         log.info(username + "DB 에서 찾는중...");
@@ -31,6 +32,6 @@ public class CustomUserDetailsService implements UserDetailsService {
         if(account == null){
             throw new UsernameNotFoundException(username);
         }
-        return new CustomUserDetails(account);
+        return new CustomUserDetails(account, accountService);
     }
 }

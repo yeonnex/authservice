@@ -1,6 +1,8 @@
 package com.example.authservice.auth;
 
 import com.example.authservice.entity.Account;
+import com.example.authservice.service.AccountService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -8,17 +10,15 @@ import org.springframework.security.core.userdetails.UserDetails;
 import java.util.Collection;
 import java.util.HashSet;
 
+@RequiredArgsConstructor
 public class CustomUserDetails implements UserDetails {
-    private Account account;
+    private final Account account;
+    private final AccountService accountService;
 
-    // 생성자 만들어서 account 받기!
-    public CustomUserDetails(Account account){
-        this.account = account;
-    }
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        Collection<GrantedAuthority> authorities = new HashSet<>(account.getRoles().size()); // List 를 쓰나 Set 을 쓰나 동작에 차이가 없다면 HashSet 을 쓰자!
-        for (String role : account.getRoles()){
+        Collection<GrantedAuthority> authorities = new HashSet<>(accountService.getAccountRoles(account).size()); // List 를 쓰나 Set 을 쓰나 동작에 차이가 없다면 HashSet 을 쓰자!
+        for (String role : accountService.getAccountRoles(account)){
             authorities.add(new SimpleGrantedAuthority("ROLE_" + role));
         }
         return authorities;
