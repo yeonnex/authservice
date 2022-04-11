@@ -2,29 +2,39 @@ package com.example.authservice.entity;
 
 import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
-import javax.validation.constraints.Email;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
 
 @Entity
 @Data
 public class Account {
     @Id
     @GeneratedValue
+    @Column(name = "account_id")
     private Long id;
-    @Email
+
+
+    @Column(name = "email")
     private String email;
+
+    @Column(name = "password")
     private String password;
-    private String name;
+
+    @Column(name = "nickname")
+    private String nickname;
+
+    @Column(name = "role")
     private String role;
 
     @CreationTimestamp
     private LocalDateTime createdAt;
 
+    @UpdateTimestamp
+    private LocalDateTime updatedAt;
 
 }
