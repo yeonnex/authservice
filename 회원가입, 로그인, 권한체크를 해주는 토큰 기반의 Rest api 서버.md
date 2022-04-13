@@ -29,6 +29,8 @@
 
 
 ## 회원가입
+### 요청 url
+POST http:localhost:8080/join
 
 ```
 {
@@ -41,13 +43,14 @@
 
 
 ## 로그인
-
+POST http://localhost:8080/login 
 ```
 {
    "email" : "yeonnex@gmail.com",
    "password" : "12345678"
 }
 ```
+> /login 의 경우, 컨트롤러단에 선언되어있지 않는데, 이 주소는 스프링 시큐리티가 알아서 낚아채는 주소이기 때문이다. 로그인 관련 로직은 UsernamePasswordAuthenticationFilter 를 상속받은`authservice>filter>CustomLoginFilter.java` 에서 확인 가능하다.
 
 
 
@@ -70,6 +73,7 @@
 - H2 (test)
 
 ### JWT
+토큰 만료 시간설정 등 jwt 관련 상수들과 설정 정보는 `application.yml` 에 적혀있음
 
 ```java
 // rawSing 를 HS256으로 암호화한 것이 Signature
@@ -104,7 +108,7 @@ BASE64(HS256암호화(rawSig))
 
 
 ## 인프라
-
+(예정)
 AWS의 EC2서버, RDS(Relational Database Service)
 
 ## Spring Security

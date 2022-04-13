@@ -24,4 +24,5 @@ logging:
     com.example.authservice: DEBUG
     org.hibernate.type.descriptor: trace
 
+jwt:
 
