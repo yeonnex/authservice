@@ -52,7 +52,11 @@ POST http://localhost:8080/login
 ```
 > /login 의 경우, 컨트롤러단에 선언되어있지 않는데, 이 주소는 스프링 시큐리티가 알아서 낚아채는 주소이기 때문이다. 로그인 관련 로직은 UsernamePasswordAuthenticationFilter 를 상속받은`authservice>filter>CustomLoginFilter.java` 에서 확인 가능하다.
 
+## 로그아웃
+GET http:localhost:8080/logout
 
+위 요청을 받았을 때, server 의 세션을 무효화하고 쿠키정보, 인증 토큰과 인증 토큰이 저장된 Security Context 객체를 삭제해주어야 한다.
+근데 이 프로젝트에서는 세션을 쓰지 않으므로 위 과정이 필요없고, 그냥 클라이언트에서 헤더의 토큰값들을 날려주면 된다.
 
 - HTTP API 설계 원칙을 기반으로 API 스펙을 디자인하기로 했다.
 - JSON을 직렬화 포맷으로 결정했다.
@@ -84,7 +88,8 @@ String rawSig = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9" + "."
 ```
 
 #### JWT
-
+매 요청마다 JwtAuthorizationFilter 필터를 타는 이유는 BasicAuthenticationFilter 를 상속받았기 때문이다.
+BasicAuthenticationFilter 는 또 OncePerRequestFilter 를 상속받고 있기 때문에 매 요청마다 이 필터를 타게 되는 것이다.
 BASE64(헤더).
 BASE64(페이로드).
 BASE64(HS256암호화(rawSig))

@@ -1,9 +1,9 @@
 
 spring:
   datasource:
-    url: jdbc:mysql://localhost:3306/blog?useSSL=false&&allowPublicKeyRetrieval=true&useUnicode=true&serverTimezone=Asia/Seoul
+    url: jdbc:mysql://localhost:3306/timer?useSSL=false&&allowPublicKeyRetrieval=true&useUnicode=true&serverTimezone=Asia/Seoul
     username: root
-    password: Abcd123@
+    password:
 
   jpa:
 
@@ -25,4 +25,5 @@ logging:
     org.hibernate.type.descriptor: trace
 
 jwt:
+  secret: "lol-lol-jwtjwt-jmt-jmt"
 

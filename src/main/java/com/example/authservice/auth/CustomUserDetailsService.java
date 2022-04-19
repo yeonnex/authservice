@@ -26,7 +26,7 @@ public class CustomUserDetailsService implements UserDetailsService {
     private final AccountRepository accountRepo;
     private final AccountService accountService;
     @Override
-    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException { // 이메일을 찾음
         log.info(username + "DB 에서 찾는중...");
         Account account = accountRepo.findByEmail(username);
         if(account == null){

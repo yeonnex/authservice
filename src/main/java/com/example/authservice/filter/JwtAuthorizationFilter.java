@@ -27,9 +27,11 @@ import java.io.IOException;
  * 시큐리티는 많은 필터들을 가지고 있는데, 그 필터들 중 BasicAuthenticationFilter 라는 필터가 있음.
  * 권한이나 인증이 필요한 주소를 요청했을 때 이 필터를 "무조건" 카게 되어있음
  * 만약에 권한이나 인증이 필요하지 않다면 이 필터를 타지 않음.
+ *
+ * 📌 들어오는 모든 요청은 이 필터를 타게됨. BasicAuthenticationFilter 가 OncePerReqeustFilter 를 상속받고 있기 때문
  */
 @Slf4j
-public class JwtAuthorizationFilter extends BasicAuthenticationFilter {
+public class JwtAuthorizationFilter extends BasicAuthenticationFilter { // OncePerRequestFilter 를 상속받아도 괜찮음.
     private AccountRepository accountRepo;
 
     public JwtAuthorizationFilter(AuthenticationManager authenticationManager, AccountRepository userRepository) {

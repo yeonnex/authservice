@@ -41,7 +41,7 @@ public class CustomLoginFilter extends UsernamePasswordAuthenticationFilter {
      *
      * 1. authenticationManager 가 로그인시도
      * 2. CustomUserDetailsService가 호출되고, loadUserByUsername() 함수 실행됨.
-     * 3. principal 을 세션에 담고(권한 관리를 위해서)
+     * 3. principal 을 세션에 담고(권한 관리를 위해서) 권한관리 필요없다면 세션 안만들어도 됨
      * 4. JWT 토큰을 만들어 응답해주면 됨.
      */
     @Override

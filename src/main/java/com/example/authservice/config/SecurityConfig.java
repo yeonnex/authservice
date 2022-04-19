@@ -29,6 +29,10 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter { // <- 시큐�
     @Override // 이 서버는 stateless 서버이며, 크로스 오리진 요청을 허용한다. 즉 모든 요청을 허용한다. 폼 로그인도 쓰지 않음.
     protected void configure(HttpSecurity http) throws Exception {
         http.csrf().disable();
+
+        http.logout() // /logout
+                .logoutSuccessUrl("/home"); // 로그아웃 성공시 리다이렉트 주소
+
         http.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS) // "이 서버는 stateless 서버야!!!"세션을 만들지 않겠다는 뜻. STATELESS 서버
                 .and()
 //                .addFilter(new FooFilter1()) // 시큐리티의 필터가 일반 필터보다 "먼저" 동작한다
