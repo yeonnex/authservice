@@ -96,7 +96,7 @@ public class CustomLoginFilter extends UsernamePasswordAuthenticationFilter {
         log.info("successfulAuthentication 함수 실행");
         CustomUserDetails principal = (CustomUserDetails)authResult.getPrincipal();
 
-        // access token 만료시간은 10분 🌙
+        // 🌙 access token 만료시간은 10분 🌙
         String accessToken = JWT.create()
                 .withClaim("id", principal.getAccount().getId())
                 .withClaim("name" , principal.getUsername())
@@ -105,7 +105,7 @@ public class CustomLoginFilter extends UsernamePasswordAuthenticationFilter {
                         .withExpiresAt(new Date(System.currentTimeMillis() + 1000*60*10))
                         .sign(Algorithm.HMAC512("secret-lol-lol"));
 
-        // refresh token 만료시간은 1시간 🌝
+        // 🌝 refresh token 만료시간은 1시간 🌝
         String refreshToken = JWT.create()
                 .withClaim("id", principal.getAccount().getId())
                 .withClaim("name", principal.getUsername())
@@ -120,7 +120,7 @@ public class CustomLoginFilter extends UsernamePasswordAuthenticationFilter {
         Cookie accessTokenCookie = new Cookie("accessToken", accessToken);
         Cookie refreshTokenCookie = new Cookie("refreshToken", refreshToken);
 
-        // 🍪 응답시 쿠키에 토큰 정보 저장하여 응답 🍪
+        // 🍪🍪 응답시 쿠키에 토큰 정보 저장하여 응답 🍪🍪
         response.addCookie(accessTokenCookie);
         response.addCookie(refreshTokenCookie);
     }
