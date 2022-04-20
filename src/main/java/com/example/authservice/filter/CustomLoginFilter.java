@@ -47,12 +47,7 @@ public class CustomLoginFilter extends UsernamePasswordAuthenticationFilter {
     @Override
     public Authentication attemptAuthentication(HttpServletRequest request, HttpServletResponse response) throws AuthenticationException {
         try{
-            /*System.out.println("===로그인시 보낸 데이터===");
-            BufferedReader br = request.getReader();
-            String input = "";
-            while((input = br.readLine()) != null){
-                System.out.println(input);
-            }*/
+
             /**
              * 로그인시 유저가 보낸 데이터를 까보자!
              */
@@ -87,7 +82,6 @@ public class CustomLoginFilter extends UsernamePasswordAuthenticationFilter {
             e.printStackTrace();
         }
         return null;
-        //
     }
 
     /**
