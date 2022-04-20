@@ -1,20 +1,14 @@
 package com.example.authservice.config;
 
 import com.example.authservice.Repository.AccountRepository;
-import com.example.authservice.filter.CustomLoginFilter;
-import com.example.authservice.filter.FooFilter1;
-import com.example.authservice.filter.FooFilter2;
+import com.example.authservice.controller.CustomLoginFilter;
 import com.example.authservice.filter.JwtAuthorizationFilter;
-import com.example.authservice.service.AccountService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.config.http.SessionCreationPolicy;
-import org.springframework.security.web.authentication.www.BasicAuthenticationFilter;
 import org.springframework.web.filter.CorsFilter;
 
 @Configuration
@@ -48,13 +42,12 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter { // <- 시큐�
                  * USER 나 ADMIN 등 권한 없이 그냥 접근시 403상태코드(Forbidden, 권한없음) 을 내려줌!
                  */
                 .antMatchers("/api/v1/user/**")
-                .access("hasRole('ROLE_USER') or hasRole('ROLE_MANAGER') or hasRole('ROLE_ADMIN')")
-                .antMatchers("/api/v1/manager/**")
-                .access("hasRole('ROLE_MANAGER') or hasRole('ROLE_ADMIN')")
+                .access("hasRole('ROLE_USER') or hasRole('ROLE_ADMIN')")
                 .antMatchers("/api/v1/admin/**")
                 .access("hasRole('ROLE_ADMIN')")
 
-                .anyRequest().permitAll(); // 그 외의 다른 요청은 전부 권한 없이 들어갈 수 있다!
+                .antMatchers("/join", "/login").permitAll()
+                .anyRequest().permitAll(); // 그외 다른 요청들은 권한이 필요!
         /**
          * 기본적인 http 로그인방식으로 쓰지 않으며,
          * 세션도 만들지 않는다.

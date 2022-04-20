@@ -1,4 +1,4 @@
-package com.example.authservice.filter;
+package com.example.authservice.controller;
 
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
@@ -16,9 +16,9 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 
 import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.io.BufferedReader;
 import java.io.IOException;
 import java.util.Date;
 
@@ -96,12 +96,32 @@ public class CustomLoginFilter extends UsernamePasswordAuthenticationFilter {
         log.info("successfulAuthentication 함수 실행");
         CustomUserDetails principal = (CustomUserDetails)authResult.getPrincipal();
 
-        String jwtToken = JWT.create()
+        // access token 만료시간은 10분
+        String accessToken = JWT.create()
                 .withClaim("id", principal.getAccount().getId())
                 .withClaim("name" , principal.getUsername())
                 .withClaim("email", principal.getAccount().getEmail())
-                        .withExpiresAt(new Date(System.currentTimeMillis() + 1000*60*10)) // 토큰 만료시간은 10분
+                .withClaim("exp", System.currentTimeMillis() + 1000*60*10)
+                        .withExpiresAt(new Date(System.currentTimeMillis() + 1000*60*10))
                         .sign(Algorithm.HMAC512("secret-lol-lol"));
-        response.addHeader("Authorization", "Bearer " + jwtToken); // 헤더에 담아 응답!
+
+        // refresh token 만료시간은 1시간
+        String refreshToken = JWT.create()
+                .withClaim("id", principal.getAccount().getId())
+                .withClaim("name", principal.getUsername())
+                .withClaim("email", principal.getAccount().getEmail())
+                .withClaim("exp", System.currentTimeMillis() + 1000*60*60)
+                .withExpiresAt(new Date(System.currentTimeMillis() + 1000*60*60))
+                .sign(Algorithm.HMAC512("secret-lol-lol"));
+
+
+
+
+        Cookie accessTokenCookie = new Cookie("accessToken", accessToken);
+        Cookie refreshTokenCookie = new Cookie("refreshToken", refreshToken);
+
+        // 응답시 쿠키에 토큰 정보 저장하여 응답 🍪
+        response.addCookie(accessTokenCookie);
+        response.addCookie(refreshTokenCookie);
     }
 }
