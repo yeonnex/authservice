@@ -15,6 +15,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.ApplicationArguments;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.json.GsonTester;
 import org.springframework.http.MediaType;
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -24,6 +25,8 @@ import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.context.WebApplicationContext;
+
+import java.util.Arrays;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
@@ -69,11 +72,17 @@ class AccountTest {
     }
 
     @Test
-    void 로그인() throws Exception {
+    void 성공적_로그인시_액세스토큰과_리프레시토큰_반환() throws Exception {
         LoginRequest request = LoginRequest.builder().email("yeonnex@gmail.com").password("1234").build();
-        mockMvc.perform(post("/login")
+        Arrays.stream(mockMvc.perform(post("/login")
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content(mapper.writeValueAsString(request))).andDo(print()).andExpect(status().isOk());
+                        .content(mapper.writeValueAsString(request))).andDo(print()).andExpect(status().isOk())
+                .andReturn().getResponse().getCookies()).forEach(cookie -> {
+            System.out.println("🍪" + cookie.getName() + cookie.getValue());
+        });
+
     }
+
+
 
 }
