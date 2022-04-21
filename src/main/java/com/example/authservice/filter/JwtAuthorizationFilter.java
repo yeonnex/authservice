@@ -9,6 +9,7 @@ import com.example.authservice.Repository.AccountRepository;
 import com.example.authservice.auth.CustomUserDetails;
 import com.example.authservice.entity.Account;
 import com.example.authservice.service.AccountService;
+import com.example.authservice.util.CookieUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -43,21 +44,29 @@ public class JwtAuthorizationFilter extends BasicAuthenticationFilter { // OnceP
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain chain)
             throws IOException, ServletException {
         log.info("JwtAuthorizationFilter 의 doFilterInternal 호출");
-        String header = request.getHeader("Authorization");
-        System.out.println("헤더출력: " + header);
-        if(header == null || !header.startsWith("Bearer")) {
+
+        String accessToken = "";
+        String refreshToken = "";
+
+        try {
+            accessToken = String.valueOf(CookieUtil.getCookie(request,"accessToken"));
+            refreshToken = String.valueOf(CookieUtil.getCookie(request, "refreshToken"));
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        System.out.println("accessToken 출력: " + accessToken);
+
+        if(accessToken == "") {
             chain.doFilter(request, response);
             return;
         }
-        System.out.println("header : "+header);
-        String token = request.getHeader("Authorization")
-                .replace("Bearer ", "");
+        log.info("accessToken : "+ accessToken);
+        log.info("refreshToken : "+ refreshToken);
 
-        // 토큰 검증 (이게 인증이기 때문에 AuthenticationManager도 필요 없음)
-        // 내가 SecurityContext에 집적접근해서 세션을 만들때 자동으로 UserDetailsService에 있는 loadByUsername이 호출됨.
-        JWT.require(Algorithm.HMAC512("secret-lol-lol")).build().verify(token);
+        JWT.require(Algorithm.HMAC512("secret-lol-lol")).build().verify(accessToken);
 
-        String email = JWT.require(Algorithm.HMAC512("secret-lol-lol")).build().verify(token).getClaim("email").asString();
+        String email = JWT.require(Algorithm.HMAC512("secret-lol-lol")).build().verify(accessToken).getClaim("email").asString();
 
         if(email != null) {
             Account account = accountRepo.findByEmail(email);
